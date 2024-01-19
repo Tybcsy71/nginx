@@ -1,0 +1,24 @@
+---
+- name: Nginx telepítés
+  hosts: all
+  become: yes
+  vars:
+    - default_index: "<h1>Szente Tibor</h1>"
+  
+  tasks:
+    - name: Nginx telepítés
+      package:
+        name: nginx
+        state: present
+      
+    - name: index.html módosítás
+      template:
+        src: index.j2
+        dest: /usr/share/nginx/html/index.html
+      notify: Restart Nginx
+      
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
